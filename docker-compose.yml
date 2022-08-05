@@ -1,0 +1,44 @@
+version: "3.1"
+services:
+    www:
+        build: .
+        ports: 
+            - "80:80"
+        volumes:
+            - .:/var/www
+            - ./logs:/var/www/logs
+            - ./sites:/etc/apache2/sites-enabled
+        links:
+            - db
+        networks:
+            - default
+        environment:
+            DOCKER: 1
+    db:
+        image: mariadb:10.5.8
+        ports: 
+            - "3306:3306"
+        command: --default-authentication-plugin=mysql_native_password
+        environment:
+            MYSQL_DATABASE: dbtest
+            MYSQL_USER: root
+            MYSQL_PASSWORD: test
+            MYSQL_ROOT_PASSWORD: test 
+        volumes:
+            - ./dump:/docker-entrypoint-initdb.d
+            - ./conf:/etc/mysql/conf.d
+            - persistent:/var/lib/mysql
+        networks:
+            - default
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        links: 
+            - db:db
+        ports:
+            - 8000:80
+        environment:
+            MYSQL_USER: root
+            MYSQL_PASSWORD: test
+            MYSQL_ROOT_PASSWORD: test 
+volumes:
+    persistent:
