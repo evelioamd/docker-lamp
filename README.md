@@ -13,6 +13,6 @@ $ docker-compose up -d
 
 *this assume, you have already installed Docker Desktop
 
-###Apache vhosts
+### Apache vhosts
 
 You can configure sites in the Apache.conf file located in *sites/* folder, the content of the file is sync with *sites-enabled* in *www* container.
